@@ -1,0 +1,16 @@
+.search-box {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  padding-left: 10px;
+  width: 50%;
+  height: 40px;
+  margin-left: 20px;
+  margin-bottom: 50px;
+  font-size: 22px;
+}
+.theme-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

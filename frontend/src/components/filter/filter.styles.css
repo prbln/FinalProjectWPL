@@ -1,0 +1,15 @@
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  font-size: 22px;
+}
+/* 
+label {
+  margin-right: 1%;
+  margin-left: 15%;
+  font-size: 22px;
+} */
+input {
+  background-color: "black";
+}
