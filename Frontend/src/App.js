@@ -1,44 +1,25 @@
-import { useState, useEffect } from 'react';
+import { Routes, Route } from "react-router-dom";
 
-import CardList from './components/card-list/card-list.component';
-import SearchBox from './components/search-box/search-box.component';
-import './App.css';
+import Home from "./routes/home/home.component";
+import Navigation from "./routes/navigation/navigation.component";
+import SignIn from "./routes/SignIn/signin.component";
+import SignUp from "./routes/SignUp/signup.component";
+import Shop from "./routes/shop/shop.component";
+import Checkout from "./routes/checkout/checkout.component";
+import Admin from "./routes/admin/admin.component";
 
 const App = () => {
-  const [searchField, setSearchField] = useState('');
-  const [monsters, setMonsters] = useState([]);
-  const [filteredMonsters, setFilterMonsters] = useState(monsters);
-
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((response) => response.json())
-      .then((users) => setMonsters(users));
-  }, []);
-
-  useEffect(() => {
-    const newFilteredMonsters = monsters.filter((monster) => {
-      return monster.name.toLocaleLowerCase().includes(searchField);
-    });
-
-    setFilterMonsters(newFilteredMonsters);
-  }, [monsters, searchField]);
-
-  const onSearchChange = (event) => {
-    const searchFieldString = event.target.value.toLocaleLowerCase();
-    setSearchField(searchFieldString);
-  };
-
   return (
-    <div className='App'>
-      <h1 className='app-title'>Monsters Rolodex</h1>
-
-      <SearchBox
-        className='monsters-search-box'
-        onChangeHandler={onSearchChange}
-        placeholder='search monsters'
-      />
-      <CardList monsters={filteredMonsters} />
-    </div>
+    <Routes>
+      <Route path="/" element={<Navigation />}>
+        <Route index element={<Home />} />
+        <Route path="shop/*" element={<Shop />} />
+        <Route path="signin" element={<SignIn />} />
+        <Route path="signup" element={<SignUp />} />
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="inventory" element={<Admin />} />
+      </Route>
+    </Routes>
   );
 };
 
