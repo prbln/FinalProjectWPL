@@ -1,5 +1,3 @@
-// ThemeModel.js
-
 const mongoose = require("mongoose");
 passportLocalMongoose = require('passport-local-mongoose');
 const themeSchema = new mongoose.Schema({
@@ -11,8 +9,6 @@ const themeSchema = new mongoose.Schema({
     type: String,
     required: true,
   }
-},{
-    collection:"themes"
 });
 themeSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model("themes", themeSchema);;

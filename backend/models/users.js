@@ -20,6 +20,10 @@ var User = new Schema({
         type: String,
         required: true,
     },
+    admin:{
+      type: String,
+        required: true,
+    }
   });
 
 User.plugin(passportLocalMongoose);

@@ -9,6 +9,7 @@ var createError = require("http-errors");
 var path = require("path");
 var User = require("./models/users");
 var ThemeModel = require("./models/themes");
+var ItemModel = require("./models/items");
 var app = express();
 var PORT = 8000;
 let cors = require("cors");
@@ -72,16 +73,16 @@ app.get("/signup", function (req, res) {
 app.post("/signup", async (req, res) => {
   const { name,username , phone, address,password } = req.body;
   console.log(name,username , phone, address, password)
-  const user = new User({name, username, phone, address});
+  const user = new User({name, username, phone, address,"admin":"0"});
   User.register(
     new User(user),
     password.toString(),
     (err) => {
       if (err) {
         console.log(err.message)
-        res.cookie("user",{});
+        return res.status(409).json({error: "User already exists"})
       }
-      res.cookie("user", req.body);
+      return res.status(409).json({user: user})
     }
   );
 });
@@ -94,15 +95,32 @@ app.get("/themes", async (req, res) => {
           "title": theme.Theme_Name,
           "image":theme.Theme_Image_Url
         }))
-    console.log(themes_);
-    res.status(200).json(themes_ );
+
+    return res.status(200).json(themes_ );
   } catch (error) {
     console.error("Error fetching themes:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-
+app.get("/themes/:id",async( req ,res)=>{
+  console.log("I am here")
+  const id= JSON.stringify(req.params.id)
+  console.log(id)
+  try {
+    const items = await ItemModel.find({"Theme_ID": req.params.id});
+    // const themes_= themes.map(theme =>({
+    //       "id": theme._id,
+    //       "title": theme.Theme_Name,
+    //       "image":theme.Theme_Image_Url
+    //     }))
+    console.log(items)
+    return res.status(200).json(items);
+  } catch (error) {
+    console.error("Error fetching Items:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+})
 
 app.post('/signin', function(req, res, next) {
   console.log("Backend", req.body);

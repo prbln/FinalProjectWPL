@@ -86,6 +86,7 @@ const SignInForm = () => {
         </ButtonsContainer>
         <a href="/signup">Don't have an account? Sign up</a>
       </form>
+      
     </SignInContainer>
   );
 };
