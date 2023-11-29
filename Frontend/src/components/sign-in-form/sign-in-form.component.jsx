@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
@@ -9,6 +9,8 @@ import {
 } from "../../utils/firebase/firebase.utils";
 
 import { SignInContainer, ButtonsContainer } from "./sign-in-form.styles";
+import { Navigate } from "react-router-dom";
+import { UserContext } from "../../contexts/user.context";
 
 const defaultFormFields = {
   username: "",
@@ -18,11 +20,12 @@ const defaultFormFields = {
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { username, password } = formFields;
-
+  const [displayError, setDisplayError] = useState(false);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   };
-
+  const navigate = useNavigate();
   // const signInWithGoogle = async () => {
   //   await signInWithGooglePopup();
   // };
@@ -33,7 +36,6 @@ const SignInForm = () => {
     try {
       // Post API --> "user data"
       // await signInAuthUserWithEmailAndPassword(email, password);
-      console.log(username, password);
       fetch("http://localhost:8000/signin", {
         method: "POST",
         headers: {
@@ -44,9 +46,13 @@ const SignInForm = () => {
           username: username,
           password: password,
         }),
-      })
-        .then((res) => res.status)
-        .then((statusCode) => console.log(statusCode));
+      }).then(async (res) => {
+        if (res.status == 200) {
+          const data = await res.json();
+          setCurrentUser(data);
+          navigate("/");
+        } else setDisplayError(true);
+      });
       resetFormFields();
     } catch (error) {
       console.log("user sign in failed", error);
@@ -63,7 +69,7 @@ const SignInForm = () => {
     <SignInContainer>
       <h2>Already have an account?</h2>
       <span>Sign in with your email and password</span>
-      <form onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit}>
         <FormInput
           label="Email"
           type="email"
@@ -81,12 +87,16 @@ const SignInForm = () => {
           name="password"
           value={password}
         />
+        {displayError && (
+          <p style={{ color: "red", textAlign: "center" }}>
+            <b>Invalid login credentials</b>
+          </p>
+        )}
         <ButtonsContainer>
           <Button type="submit">Sign In</Button>
         </ButtonsContainer>
         <a href="/signup">Don't have an account? Sign up</a>
       </form>
-      
     </SignInContainer>
   );
 };

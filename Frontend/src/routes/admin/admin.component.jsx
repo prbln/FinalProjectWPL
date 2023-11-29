@@ -18,7 +18,7 @@ const Admin = () => {
   const [newItem, setNewItem] = useState(false);
   useEffect(() => {
     const getAllThemes = async () => {
-      const data = await fetch("https://fakestoreapi.com/products")
+      const data = await fetch("http://localhost:8000/allproducts")
         .then((res) => res.json())
         .then((themes) => {
           themes.push({

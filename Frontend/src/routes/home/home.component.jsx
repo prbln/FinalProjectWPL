@@ -25,7 +25,6 @@ const Home = () => {
       const data = await fetch("http://localhost:8000/themes")
         .then((res) => res.json())
         .then((themes) => {
-          console.log(themes)
           setcategories(themes);
         });
     };

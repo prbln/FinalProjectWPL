@@ -7,7 +7,7 @@ const FilterComponent = ({ products, setProducts }) => {
   const handlePriceRangeChange = (e) => {
     setPriceRange(e.target.value);
     const filteredProducts = products?.filter(
-      (item) => item.price < e.target.value
+      (item) => item.Item_Price < e.target.value
     );
     if (products) {
       setProducts(filteredProducts);
@@ -16,10 +16,13 @@ const FilterComponent = ({ products, setProducts }) => {
 
   const handleSortByChange = (e) => {
     setSortBy(e.target.value);
-    console.log(e.target.value);
     e.target.value == "price-desc"
-      ? setProducts(products.slice().sort((a, b) => b.price - a.price))
-      : setProducts(products.slice().sort((a, b) => a.price - b.price));
+      ? setProducts(
+          products.slice().sort((a, b) => b.Item_Price - a.Item_Price)
+        )
+      : setProducts(
+          products.slice().sort((a, b) => a.Item_Price - b.Item_Price)
+        );
   };
 
   return (
@@ -38,7 +41,7 @@ const FilterComponent = ({ products, setProducts }) => {
         <input
           type="range"
           min="0"
-          max="30"
+          max="200"
           step="1"
           value={priceRange}
           onChange={handlePriceRangeChange}

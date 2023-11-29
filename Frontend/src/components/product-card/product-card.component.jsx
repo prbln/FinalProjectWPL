@@ -1,21 +1,34 @@
-import { useContext } from 'react';
+import { useContext } from "react";
 
-import { CartContext } from '../../contexts/cart.context';
+import { CartContext } from "../../contexts/cart.context";
 
-import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
 import {
   ProductCartContainer,
   Footer,
   Name,
   Price,
-} from './product-card.styles';
+} from "./product-card.styles";
 
 const ProductCard = ({ product }) => {
-  const { name, price, imageUrl } = product;
+  const {
+    Item_Name: name,
+    Item_Price: price,
+    Item_Image_Url: imageUrl,
+  } = product;
+  const newCartObj = {
+    name: product.Item_Name,
+    imageUrl: product.Item_Image_Url,
+    description: product.Description,
+    price: product.Item_Price,
+    quantity: product.Item_Qty,
+    id: product._id,
+  };
+
   const { addItemToCart } = useContext(CartContext);
 
-  const addProductToCart = () => addItemToCart(product);
+  const addProductToCart = () => addItemToCart(newCartObj);
 
   return (
     <ProductCartContainer>

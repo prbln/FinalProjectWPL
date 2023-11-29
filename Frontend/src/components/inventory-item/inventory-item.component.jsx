@@ -14,14 +14,20 @@ import {
   Value,
   RemoveButton,
 } from "./inventory-item.styles";
-
+let count = 0;
 const InventoryItem = ({ cartItem, lastItem }) => {
-  const { id, title, image, price, stock } = cartItem;
-  let quantity = 20;
+  count += 1;
+  const {
+    _id: id,
+    Item_Name: title,
+    Item_Image_Url: image,
+    Item_Price: price,
+    Item_Qty: stock,
+  } = cartItem;
 
   const [newtitle, setNewTitle] = useState(title);
   const [newprice, setNewPrice] = useState(price);
-  const [newstock, setNewStock] = useState(quantity);
+  const [newstock, setNewStock] = useState(stock);
   // update
 
   const handleTitleChange = (e) => {
@@ -42,11 +48,9 @@ const InventoryItem = ({ cartItem, lastItem }) => {
   };
   return (
     <TableRow>
-      <TableCell>{id}</TableCell>
+      <TableCell>{count / 2}</TableCell>
       <TableCell>
-        <ImageContainer>
-          <img src={image} alt={`${title}`} />
-        </ImageContainer>
+        <img src={image} alt={`${title}`} width={"200px"} />
       </TableCell>
       <TableCell>
         <input value={newtitle} onChange={handleTitleChange} />

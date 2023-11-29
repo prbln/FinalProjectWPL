@@ -13,8 +13,7 @@ import {
 } from "./checkout-item.styles";
 
 const CheckoutItem = ({ cartItem }) => {
-  const { name, imageUrl, price, quantity } = cartItem;
-
+  const { name, imageUrl, description, price, quantity } = cartItem;
   const { clearItemFromCart, addItemToCart, removeItemToCart } =
     useContext(CartContext);
 
@@ -27,7 +26,7 @@ const CheckoutItem = ({ cartItem }) => {
       <ImageContainer>
         <img src={imageUrl} alt={`${name}`} />
       </ImageContainer>
-      <BaseSpan> {name} </BaseSpan>
+      <BaseSpan> {description} </BaseSpan>
       <Quantity>
         <Arrow onClick={removeItemHandler}>&#10094;</Arrow>
         <Value>{quantity}</Value>

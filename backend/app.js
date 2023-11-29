@@ -20,17 +20,19 @@ var message = "";
 app.use(cors());
 app.use(cookieParser());
 mongoose
-  .connect("mongodb+srv://venkat:Venkat1708@cluster0.dp7vavc.mongodb.net/wplproject", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb+srv://venkat:Venkat1708@cluster0.dp7vavc.mongodb.net/wplproject",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     console.log("MongoDB connected");
   })
   .catch((err) => {
     console.error("MongoDB connection error:", err);
   });
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -50,8 +52,6 @@ passport.deserializeUser(User.deserializeUser());
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-
 app.get("/", function (req, res) {
   // res.redirect("/login");
 });
@@ -68,80 +68,85 @@ app.get("/signup", function (req, res) {
   // res.render("signup", { error });
 });
 
-
-
 app.post("/signup", async (req, res) => {
-  const { name,username , phone, address,password } = req.body;
-  console.log(name,username , phone, address, password)
-  const user = new User({name, username, phone, address,"admin":"0"});
-  User.register(
-    new User(user),
-    password.toString(),
-    (err) => {
-      if (err) {
-        console.log(err.message)
-        return res.status(409).json({error: "User already exists"})
-      }
-      return res.status(409).json({user: user})
+  const { name, username, phone, address, password } = req.body;
+  console.log(name, username, phone, address, password);
+  const user = new User({ name, username, phone, address, admin: "0" });
+  User.register(new User(user), password.toString(), (err) => {
+    if (err) {
+      console.log(err.message);
+      return res.status(409).json({ error: "User already exists" });
     }
-  );
+    return res.status(409).json({ user: user });
+  });
 });
 
 app.get("/themes", async (req, res) => {
   try {
     const themes = await ThemeModel.find({});
-    const themes_= themes.map(theme =>({
-          "id": theme._id,
-          "title": theme.Theme_Name,
-          "image":theme.Theme_Image_Url
-        }))
+    const themes_ = themes.map((theme) => ({
+      id: theme._id,
+      title: theme.Theme_Name,
+      image: theme.Theme_Image_Url,
+    }));
 
-    return res.status(200).json(themes_ );
+    return res.status(200).json(themes_);
   } catch (error) {
     console.error("Error fetching themes:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-app.get("/themes/:id",async( req ,res)=>{
-  console.log("I am here")
-  const id= JSON.stringify(req.params.id)
-  console.log(id)
+// app.get("/themes/:id",async( req ,res)=>{
+//   console.log("I am here")
+//   const id= JSON.stringify(req.params.id)
+//   console.log(id)
+//   try {
+//     const items = await ItemModel.find({"Theme_ID": req.params.id});
+//     // const themes_= themes.map(theme =>({
+//     //       "id": theme._id,
+//     //       "title": theme.Theme_Name,
+//     //       "image":theme.Theme_Image_Url
+//     //     }))
+//     console.log(items)
+//     return res.status(200).json(items);
+//   } catch (error) {
+//     console.error("Error fetching Items:", error);
+//     return res.status(500).json({ error: "Internal Server Error" });
+//   }
+// })
+app.get("/themes/:title", async (req, res) => {
+  console.log("I am here");
+  const title = req.params.title;
   try {
-    const items = await ItemModel.find({"Theme_ID": req.params.id});
-    // const themes_= themes.map(theme =>({
-    //       "id": theme._id,
-    //       "title": theme.Theme_Name,
-    //       "image":theme.Theme_Image_Url
-    //     }))
-    console.log(items)
+    const theme = await ThemeModel.findOne({ Theme_Name: title });
+    const items = await ItemModel.find({ Theme_ID: theme._id });
+    console.log(items);
     return res.status(200).json(items);
   } catch (error) {
     console.error("Error fetching Items:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
-})
-
-app.post('/signin', function(req, res, next) {
+});
+app.post("/signin", function (req, res, next) {
   console.log("Backend", req.body);
-  passport.authenticate('local', function(err, user, info) {
+  passport.authenticate("local", function (err, user, info) {
     if (err) {
       return next(err);
     }
     if (!user) {
       console.log("User not Signed In");
-      return res.status(401).json({error: 'Invalid Username or Password' });
+      return res.status(401).json({ error: "Invalid Username or Password" });
     }
-    req.logIn(user, function(err) {
+    req.logIn(user, function (err) {
       if (err) {
         return next(err);
       }
       console.log("User Signed In");
-      return res.status(200).json({user: user, message:"Successfully Signed In"});;
+      return res.status(200).json({ user, message: "Successfully Signed In" });
     });
   })(req, res, next);
 });
-
 
 // app.use((req, res, next) => {
 //   if (req.isAuthenticated()) {
@@ -172,7 +177,16 @@ app.get("/logout", isLoggedIn, function (req, res) {
     // res.redirect("/");
   });
 });
-
+app.get("/allproducts", async (req, res) => {
+  try {
+    const items = await ItemModel.find({});
+    console.log(items);
+    return res.status(200).json(items);
+  } catch (error) {
+    console.error("Error fetching Items:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     // message="User is Logged Out, Require Re-Login"
