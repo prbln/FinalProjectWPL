@@ -7,6 +7,7 @@ import SignUp from "./routes/SignUp/signup.component";
 import Shop from "./routes/shop/shop.component";
 import Checkout from "./routes/checkout/checkout.component";
 import Admin from "./routes/admin/admin.component";
+import Order from "./routes/order/order.component";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="signup" element={<SignUp />} />
         <Route path="checkout" element={<Checkout />} />
         <Route path="inventory" element={<Admin />} />
+        <Route path="orderDetails" element={<Order />} />
       </Route>
     </Routes>
   );

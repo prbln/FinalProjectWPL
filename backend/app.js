@@ -210,12 +210,35 @@ app.put("/inventory", async (req, res) => {
 app.delete("/inventory", async (req, res) => {
   const newItem = req.body;
   const items = await ItemModel.deleteOne({ _id: newItem._id });
-  console.log(items);
+
   items.deletedCount == 1
     ? res.status(200)
     : res.status(500).json({ error: "Item not deleted" });
 });
 
+app.post("/checkout", async (req, res) => {
+  const productsOrdered = req.body;
+  for (const orderItem of productsOrdered) {
+    const item = await ItemModel.findById(orderItem.id);
+    if (item.Item_Qty - orderItem.quantity < 0) {
+      return res.status(400).json({
+        error: `Insufficient stock for ${orderItem.name}, only ${item.Item_Qty} in stock. `,
+      });
+    }
+  }
+  for (const orderItem of productsOrdered) {
+    const item = await ItemModel.findById(orderItem.id);
+    await ItemModel.updateOne(
+      { _id: orderItem.id },
+      {
+        $set: {
+          Item_Qty: item.Item_Qty - orderItem.quantity,
+        },
+      }
+    );
+  }
+  res.status(200).json({ message: "Order placed successfully" });
+});
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     // message="User is Logged Out, Require Re-Login"

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const CheckoutContainer = styled.div`
   width: 55%;
@@ -29,5 +29,9 @@ export const HeaderBlock = styled.div`
 export const Total = styled.span`
   margin-top: 30px;
   margin-left: auto;
+  font-size: 36px;
+`;
+export const Button = styled.button`
+  margin-top: 30px;
   font-size: 36px;
 `;

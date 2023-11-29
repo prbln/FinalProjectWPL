@@ -1,0 +1,28 @@
+/* OrderDetails.css */
+
+.order-details-container {
+  max-width: 40%;
+  margin: 20px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-size: 22px;
+  text-align: center;
+}
+
+.order-details {
+  margin-top: 10px;
+  text-align: left;
+}
+
+.order-details p {
+  margin: 8px 0;
+}
+.order-items {
+  text-align: center;
+}
+Button {
+  margin-top: 40px;
+}
+/* Add more styling based on your design preferences */
