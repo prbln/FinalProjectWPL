@@ -17,7 +17,9 @@ import {
 } from "./inventory-item.styles";
 let count = 0;
 const InventoryItem = ({ cartItem, lastItem }) => {
+  // TODO 04. correct count variable to show index correctly
   count += 1;
+
   const {
     _id: id,
     Item_Name: title,
@@ -88,6 +90,7 @@ const InventoryItem = ({ cartItem, lastItem }) => {
     });
   };
   const addNewItems = (id, newprice, newstock, newtitle) => {
+    // TODO 03. Adding new items inventory
     console.log(id, newprice, newstock, newtitle);
   };
   return (

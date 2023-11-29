@@ -21,7 +21,7 @@ const SignUpForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { name, username, password, confirmPassword, address, pnumber } =
     formFields;
-
+  // TODO 06. Sign up page, redirecting, showing error messages
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   };
@@ -40,7 +40,6 @@ const SignUpForm = () => {
 
     setFormFields({ ...formFields, [name]: value });
   };
-
   return (
     <SignUpContainer>
       <h2>Don't have an account?</h2>

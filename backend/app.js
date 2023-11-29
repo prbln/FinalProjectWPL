@@ -10,6 +10,7 @@ var path = require("path");
 var User = require("./models/users");
 var ThemeModel = require("./models/themes");
 var ItemModel = require("./models/items");
+var OrdersModel = require("./models/orders");
 var app = express();
 var PORT = 8000;
 let cors = require("cors");
@@ -236,8 +237,10 @@ app.post("/checkout", async (req, res) => {
         },
       }
     );
+    const order = await OrdersModel.insertMany([productsOrdered]);
+    console.log(order);
+    res.json({ orderId: "6567c2eb7d5d9ea780fcf839" });
   }
-  res.status(200).json({ message: "Order placed successfully" });
 });
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {

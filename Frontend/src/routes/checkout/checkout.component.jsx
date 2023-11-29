@@ -24,7 +24,6 @@ const Checkout = () => {
     cartCount,
     setCartCount,
   } = useContext(CartContext);
-  console.log(setCartItems);
   const { currentUser } = useContext(UserContext);
   const handleOrderPlaced = () => {
     if (!currentUser) {
@@ -40,7 +39,10 @@ const Checkout = () => {
         body: JSON.stringify(cartItems),
       }).then(async (res) => {
         if (res.status == 200) {
-          navigate("/orderDetails");
+          const orderId = await res.json();
+          console.log("orderId", orderId);
+          // TODO 02. BEFORE NAGIVATING GET cart items to empty, unable to use setCartItems from cart context
+          navigate(`/orderDetails/${orderId.orderId}`);
         } else {
           const errorMessage = await res.json();
           console.log(errorMessage);
