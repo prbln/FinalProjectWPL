@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { CartContext } from "../../contexts/cart.context";
 import Button from "../button/button.component";
@@ -28,8 +29,34 @@ const InventoryItem = ({ cartItem, lastItem }) => {
   const [newtitle, setNewTitle] = useState(title);
   const [newprice, setNewPrice] = useState(price);
   const [newstock, setNewStock] = useState(stock);
-  // update
 
+  const navigate = useNavigate();
+  const confirmDelete = () => {
+    let text = "Press a button!\nEither OK or Cancel.";
+    /* eslint-disable no-restricted-globals */
+    return confirm(text);
+    /* eslint-enable no-restricted-globals */
+  };
+  const deleteitem = (e) => {
+    if (confirmDelete()) {
+      fetch("http://localhost:8000/inventory", {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _id: id,
+        }),
+      }).then((res) => {
+        if (res.status == 200) {
+          navigate("/inventory");
+        } else {
+          alert("Unable to delete item.");
+        }
+      });
+    }
+  };
   const handleTitleChange = (e) => {
     setNewTitle(e.target.value);
   };
@@ -42,6 +69,23 @@ const InventoryItem = ({ cartItem, lastItem }) => {
   };
   const onSaveChanges = (id, newprice, newstock, newtitle) => {
     console.log(id, newprice, newstock, newtitle);
+    fetch("http://localhost:8000/inventory", {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _id: id,
+        Item_Price: newprice,
+        Item_Qty: newstock,
+        Item_Name: newtitle,
+      }),
+    }).then(async (res) => {
+      if (res.status == 200) {
+        alert("Item successfully updated! ");
+      } else alert("Unable to update Item");
+    });
   };
   const addNewItems = (id, newprice, newstock, newtitle) => {
     console.log(id, newprice, newstock, newtitle);
@@ -67,7 +111,7 @@ const InventoryItem = ({ cartItem, lastItem }) => {
         </Quantity>
       </TableCell>
       <TableCell>
-        <RemoveButton>&#10005;</RemoveButton>
+        <RemoveButton onClick={() => deleteitem(id)}>&#10005;</RemoveButton>
       </TableCell>
       <TableCell>
         {lastItem ? (
@@ -75,28 +119,14 @@ const InventoryItem = ({ cartItem, lastItem }) => {
             Add new item
           </button>
         ) : (
-          <button
+          <Button
             onClick={() => onSaveChanges(id, newprice, newstock, newtitle)}
           >
             Save
-          </button>
+          </Button>
         )}
       </TableCell>
     </TableRow>
-    // <CheckoutItemContainer>
-    //   <ImageContainer>
-    //     <img src={image} alt={`${title}`} />
-    //   </ImageContainer>
-    //   <BaseSpan> {title} </BaseSpan>
-    //   <Quantity>
-    //     <Arrow onClick={removeItemHandler}>&#10094;</Arrow>
-    //     <Value>{quantity}</Value>
-    //     <Arrow onClick={addItemHandler}>&#10095;</Arrow>
-    //   </Quantity>
-    //   <BaseSpan> {price}</BaseSpan>
-    //   <RemoveButton onClick={clearItemHandler}>&#10005;</RemoveButton>
-    //   <Button>Save Changes</Button>
-    // </CheckoutItemContainer>
   );
 };
 

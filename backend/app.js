@@ -187,6 +187,35 @@ app.get("/allproducts", async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+app.put("/inventory", async (req, res) => {
+  const newItem = req.body;
+  const items = await ItemModel.updateOne(
+    { _id: newItem._id },
+    {
+      $set: {
+        Item_Name: newItem.Item_Name,
+        Item_Price: newItem.Item_Price,
+        Item_Qty: newItem.Item_Qty,
+      },
+    }
+  );
+  items.modifiedCount == 1
+    ? res.status(200)
+    : res.status(500).json({ error: "Item not updated" });
+
+  return res.status(200);
+});
+
+app.delete("/inventory", async (req, res) => {
+  const newItem = req.body;
+  const items = await ItemModel.deleteOne({ _id: newItem._id });
+  console.log(items);
+  items.deletedCount == 1
+    ? res.status(200)
+    : res.status(500).json({ error: "Item not deleted" });
+});
+
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     // message="User is Logged Out, Require Re-Login"
