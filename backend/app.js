@@ -70,16 +70,32 @@ app.get("/signup", function (req, res) {
 });
 
 app.post("/signup", async (req, res) => {
+  console.log(req.body);
   const { name, username, phone, address, password } = req.body;
   console.log(name, username, phone, address, password);
   const user = new User({ name, username, phone, address, admin: "0" });
   User.register(new User(user), password.toString(), (err) => {
     if (err) {
       console.log(err.message);
-      return res.status(409).json({ error: "User already exists" });
+      return res.status(409).json({ error: err });
     }
-    return res.status(409).json({ user: user });
+    return res.status(200).json({ user: user });
   });
+});
+
+app.post("/addNewItem", async (req, res) => {
+  console.log(req.body);
+  const { imgUrl, itemQuant, price, category } = req.body;
+  console.log(imgUrl, itemQuant, price, category);
+  // Add new Item query here TODO
+  // const user = new User({ name, username, phone, address, admin: "0" });
+  // User.register(new User(user), password.toString(), (err) => {
+  //   if (err) {
+  //     console.log(err.message);
+  //     return res.status(409).json({ error: err });
+  //   }
+  res.send(200);
+  // });
 });
 
 app.get("/themes", async (req, res) => {
@@ -98,24 +114,6 @@ app.get("/themes", async (req, res) => {
   }
 });
 
-// app.get("/themes/:id",async( req ,res)=>{
-//   console.log("I am here")
-//   const id= JSON.stringify(req.params.id)
-//   console.log(id)
-//   try {
-//     const items = await ItemModel.find({"Theme_ID": req.params.id});
-//     // const themes_= themes.map(theme =>({
-//     //       "id": theme._id,
-//     //       "title": theme.Theme_Name,
-//     //       "image":theme.Theme_Image_Url
-//     //     }))
-//     console.log(items)
-//     return res.status(200).json(items);
-//   } catch (error) {
-//     console.error("Error fetching Items:", error);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// })
 app.get("/themes/:title", async (req, res) => {
   console.log("I am here");
   const title = req.params.title;
@@ -148,13 +146,6 @@ app.post("/signin", function (req, res, next) {
     });
   })(req, res, next);
 });
-
-// app.use((req, res, next) => {
-//   if (req.isAuthenticated()) {
-//     req.session.lastActivity = Date.now();
-//   }
-//   next();
-// });
 
 app.get("/welcome", isLoggedIn, function (req, res) {
   const username = req.user.username;
@@ -237,6 +228,7 @@ app.post("/checkout", async (req, res) => {
         },
       }
     );
+    // TODO insert properly
     const order = await OrdersModel.insertMany([productsOrdered]);
     console.log(order);
     res.json({ orderId: "6567c2eb7d5d9ea780fcf839" });
