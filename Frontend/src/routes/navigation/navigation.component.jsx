@@ -24,7 +24,7 @@ const Navigation = () => {
     setCurrentUser("");
     navigate("/signin");
   };
-  console.log("here", currentUser);
+  console.log("here", typeof currentUser, currentUser?.user.admin);
   return (
     <Fragment>
       <NavigationContainer>
@@ -33,10 +33,18 @@ const Navigation = () => {
         </LogoContainer>
 
         <NavLinks>
+          {parseInt(currentUser?.user.admin) ? (
+            <NavLink to="/inventory">Check Inventory</NavLink>
+          ) : (
+            <></>
+          )}
+
           {currentUser ? (
-            <NavLink as="span" onClick={signOutUser}>
-              <span>Hi {currentUser.user.name} </span>
-              SIGN OUT
+            <NavLink as="span">
+              <span style={{ "margin-right": "20px", "font-size": "22px" }}>
+                <b>Hi! {currentUser.user.name} 🤗 </b>
+              </span>
+              <span onClick={signOutUser}>SIGN OUT</span>
             </NavLink>
           ) : (
             <NavLink to="/signin">SIGN IN</NavLink>

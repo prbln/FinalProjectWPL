@@ -15,11 +15,7 @@ import {
   Value,
   RemoveButton,
 } from "./inventory-item.styles";
-let count = 0;
-const InventoryItem = ({ cartItem, lastItem }) => {
-  // TODO 04. correct count variable to show index correctly
-  count += 1;
-
+const InventoryItem = ({ cartItem, index }) => {
   const {
     _id: id,
     Item_Name: title,
@@ -34,7 +30,7 @@ const InventoryItem = ({ cartItem, lastItem }) => {
 
   const navigate = useNavigate();
   const confirmDelete = () => {
-    let text = "Press a button!\nEither OK or Cancel.";
+    let text = "Are you sure you want to delete?";
     /* eslint-disable no-restricted-globals */
     return confirm(text);
     /* eslint-enable no-restricted-globals */
@@ -70,7 +66,6 @@ const InventoryItem = ({ cartItem, lastItem }) => {
     setNewPrice(e.target.value);
   };
   const onSaveChanges = (id, newprice, newstock, newtitle) => {
-    console.log(id, newprice, newstock, newtitle);
     fetch("http://localhost:8000/inventory", {
       method: "PUT",
       headers: {
@@ -95,7 +90,7 @@ const InventoryItem = ({ cartItem, lastItem }) => {
   };
   return (
     <TableRow>
-      <TableCell>{count / 2}</TableCell>
+      <TableCell>{index + 1}</TableCell>
       <TableCell>
         <img src={image} alt={`${title}`} width={"200px"} />
       </TableCell>
@@ -117,17 +112,9 @@ const InventoryItem = ({ cartItem, lastItem }) => {
         <RemoveButton onClick={() => deleteitem(id)}>&#10005;</RemoveButton>
       </TableCell>
       <TableCell>
-        {lastItem ? (
-          <button onClick={() => addNewItems(id, newprice, newstock, newtitle)}>
-            Add new item
-          </button>
-        ) : (
-          <Button
-            onClick={() => onSaveChanges(id, newprice, newstock, newtitle)}
-          >
-            Save
-          </Button>
-        )}
+        <Button onClick={() => onSaveChanges(id, newprice, newstock, newtitle)}>
+          Save
+        </Button>
       </TableCell>
     </TableRow>
   );

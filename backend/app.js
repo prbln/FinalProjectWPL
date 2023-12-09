@@ -83,20 +83,20 @@ app.post("/signup", async (req, res) => {
   });
 });
 
-app.post("/addNewItem", async (req, res) => {
-  console.log(req.body);
-  const { imgUrl, itemQuant, price, category } = req.body;
-  console.log(imgUrl, itemQuant, price, category);
-  // Add new Item query here TODO
-  // const user = new User({ name, username, phone, address, admin: "0" });
-  // User.register(new User(user), password.toString(), (err) => {
-  //   if (err) {
-  //     console.log(err.message);
-  //     return res.status(409).json({ error: err });
-  //   }
-  res.send(200);
-  // });
-});
+// app.post("/addNewItem", async (req, res) => {
+//   console.log(req.body);
+//   const { imgUrl, itemQuant, price, category } = req.body;
+//   console.log(imgUrl, itemQuant, price, category);
+//   // Add new Item query here TODO
+//   // const user = new User({ name, username, phone, address, admin: "0" });
+//   // User.register(new User(user), password.toString(), (err) => {
+//   //   if (err) {
+//   //     console.log(err.message);
+//   //     return res.status(409).json({ error: err });
+//   //   }
+//   res.send(200);
+//   // });
+// });
 
 app.get("/themes", async (req, res) => {
   try {
@@ -197,6 +197,21 @@ app.put("/inventory", async (req, res) => {
     : res.status(500).json({ error: "Item not updated" });
 
   return res.status(200);
+});
+
+app.post("/addNewItem", async (req, res) => {
+  console.log(await req.body);
+  const { imgUrl, itemQuant, price, category } = req.body;
+  console.log(imgUrl, itemQuant, price, category);
+  // Add new Item query here TODO
+  // const user = new User({ name, username, phone, address, admin: "0" });
+  // User.register(new User(user), password.toString(), (err) => {
+  //   if (err) {
+  //     console.log(err.message);
+  //     return res.status(409).json({ error: err });
+  //   }
+  res.send(200);
+  // });
 });
 
 app.delete("/inventory", async (req, res) => {
