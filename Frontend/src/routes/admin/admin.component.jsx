@@ -20,7 +20,6 @@ const Admin = () => {
   const [categories, setcategories] = useState([]);
   const [newItem, setNewItem] = useState(false);
   const { currentUser, setCurrentUser } = useContext(UserContext);
-  console.log(currentUser?.user.admin);
   const isadmin = currentUser?.admin;
   const navigate = useNavigate();
 
@@ -29,14 +28,6 @@ const Admin = () => {
       const data = await fetch("http://localhost:8000/allproducts")
         .then((res) => res.json())
         .then((themes) => {
-          // themes.push({
-          //   id: themes.length + 1,
-          //   title: "New Item Title",
-          //   price: "New Item price",
-          //   category: "New Item category",
-          //   description: "New Item description",
-          //   image: "...",
-          // });
           setcategories(themes);
         });
     };

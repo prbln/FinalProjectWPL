@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const itemSchema = new mongoose.Schema({
   Theme_ID: {
@@ -27,9 +27,8 @@ const itemSchema = new mongoose.Schema({
   },
   Item_Category: {
     type: String,
-    required: true,
+    required: false,
   },
 });
 
-
-module.exports = mongoose.model('items', itemSchema);;
+module.exports = mongoose.model("items", itemSchema);

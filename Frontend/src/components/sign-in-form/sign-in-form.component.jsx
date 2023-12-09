@@ -3,11 +3,6 @@ import { useNavigate } from "react-router-dom";
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
-import {
-  signInAuthUserWithEmailAndPassword,
-  signInWithGooglePopup,
-} from "../../utils/firebase/firebase.utils";
-
 import { SignInContainer, ButtonsContainer } from "./sign-in-form.styles";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../../contexts/user.context";
@@ -71,8 +66,8 @@ const SignInForm = () => {
       <span>Sign in with your email and password</span>
       <form onSubmit={handleSubmit}>
         <FormInput
-          label="Email"
           type="email"
+          placeholder="Email"
           required
           onChange={handleChange}
           name="username"
@@ -80,7 +75,7 @@ const SignInForm = () => {
         />
 
         <FormInput
-          label="Password"
+          placeholder="Password"
           type="password"
           required
           onChange={handleChange}

@@ -45,7 +45,6 @@ const Checkout = () => {
           navigate(`/orderDetails/${orderId.orderId}`);
         } else {
           const errorMessage = await res.json();
-          console.log(errorMessage);
           alert(errorMessage.error);
         }
       });

@@ -4,11 +4,6 @@ import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 import { useNavigate } from "react-router-dom";
 
-import {
-  createAuthUserWithEmailAndPassword,
-  createUserDocumentFromAuth,
-} from "../../utils/firebase/firebase.utils";
-
 import { SignUpContainer } from "./sign-up-form.styles";
 
 const defaultFormFields = {
@@ -52,7 +47,6 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("phone", phone);
     if (password !== confirmPassword) {
       alert("passwords do not match");
       return;

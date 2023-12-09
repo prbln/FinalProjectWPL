@@ -7,7 +7,7 @@ import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component
 import { UserContext } from "../../contexts/user.context";
 import { CartContext } from "../../contexts/cart.context";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as CrwnLogo } from "../../assets/logo.svg";
+import { useLocation } from "react-router-dom";
 
 import {
   NavigationContainer,
@@ -20,11 +20,20 @@ const Navigation = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const { isCartOpen } = useContext(CartContext);
   const navigate = useNavigate();
-  const signOutUser = () => {
+  const signOutUser = (e) => {
+    e.preventDefault();
     setCurrentUser("");
     navigate("/signin");
+    navigate(0);
   };
-  console.log("here", typeof currentUser, currentUser?.user.admin);
+  const location = useLocation();
+  const renderAuthLink = () => {
+    if (location.pathname == "/signin") {
+      return <NavLink to="/signup">SIGN UP</NavLink>;
+    } else {
+      return <NavLink to="/signin">SIGN IN</NavLink>;
+    }
+  };
   return (
     <Fragment>
       <NavigationContainer>
@@ -44,10 +53,10 @@ const Navigation = () => {
               <span style={{ "margin-right": "20px", "font-size": "22px" }}>
                 <b>Hi! {currentUser.user.name} 🤗 </b>
               </span>
-              <span onClick={signOutUser}>SIGN OUT</span>
+              <span onClick={(e) => signOutUser(e)}>SIGN OUT</span>
             </NavLink>
           ) : (
-            <NavLink to="/signin">SIGN IN</NavLink>
+            renderAuthLink()
           )}
           <CartIcon />
         </NavLinks>

@@ -1,7 +1,7 @@
 // OrderDetails.jsx
 
 import React, { useContext } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { CartContext } from "../../contexts/cart.context";
 import { UserContext } from "../../contexts/user.context";
 import Button from "../button/button.component";
@@ -10,12 +10,12 @@ import "./order-details.css";
 const OrderDetails = ({ orderDetails }) => {
   const { orderID } = useParams();
   let currentdate = new Date();
-  console.log(currentdate.toLocaleString(), "Date");
   const { currentUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   console.log(orderID, "params");
   // TODO 01. Commont this line below instead of taking items from cart context, query from table, orderId is accessible in above variable
-
+  fetch("", {});
   const { cartItems, cartCount, cartTotal } = useContext(CartContext);
 
   const OrderItem = ({ index, item }) => (
@@ -29,7 +29,9 @@ const OrderDetails = ({ orderDetails }) => {
       </p>
     </div>
   );
-
+  const clearCart = () => {
+    navigate("/");
+  };
   return (
     <div className="order-details-container">
       <h2>Your Order Details</h2>
@@ -55,7 +57,7 @@ const OrderDetails = ({ orderDetails }) => {
         </p>
       </div>
 
-      <Button>Print Recipt</Button>
+      <Button onCLick={clearCart}>Back to Home</Button>
     </div>
   );
 };

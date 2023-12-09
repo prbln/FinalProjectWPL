@@ -53,22 +53,6 @@ passport.deserializeUser(User.deserializeUser());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", function (req, res) {
-  // res.redirect("/login");
-});
-
-app.get("/login", function (req, res) {
-  if (req.isAuthenticated()) {
-    console.log("i am here");
-    message = "";
-  }
-  // res.render("login", { message, error });
-});
-
-app.get("/signup", function (req, res) {
-  // res.render("signup", { error });
-});
-
 app.post("/signup", async (req, res) => {
   console.log(req.body);
   const { name, username, phone, address, password } = req.body;
@@ -82,21 +66,6 @@ app.post("/signup", async (req, res) => {
     return res.status(200).json({ user: user });
   });
 });
-
-// app.post("/addNewItem", async (req, res) => {
-//   console.log(req.body);
-//   const { imgUrl, itemQuant, price, category } = req.body;
-//   console.log(imgUrl, itemQuant, price, category);
-//   // Add new Item query here TODO
-//   // const user = new User({ name, username, phone, address, admin: "0" });
-//   // User.register(new User(user), password.toString(), (err) => {
-//   //   if (err) {
-//   //     console.log(err.message);
-//   //     return res.status(409).json({ error: err });
-//   //   }
-//   res.send(200);
-//   // });
-// });
 
 app.get("/themes", async (req, res) => {
   try {
@@ -147,28 +116,6 @@ app.post("/signin", function (req, res, next) {
   })(req, res, next);
 });
 
-app.get("/welcome", isLoggedIn, function (req, res) {
-  const username = req.user.username;
-  // res.render("welcome", { username });
-});
-
-app.post("/logout", function (req, res) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    // res.redirect("/");
-  });
-});
-
-app.get("/logout", isLoggedIn, function (req, res) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    // res.redirect("/");
-  });
-});
 app.get("/allproducts", async (req, res) => {
   try {
     const items = await ItemModel.find({});
@@ -200,18 +147,22 @@ app.put("/inventory", async (req, res) => {
 });
 
 app.post("/addNewItem", async (req, res) => {
-  console.log(await req.body);
-  const { imgUrl, itemQuant, price, category } = req.body;
-  console.log(imgUrl, itemQuant, price, category);
-  // Add new Item query here TODO
-  // const user = new User({ name, username, phone, address, admin: "0" });
-  // User.register(new User(user), password.toString(), (err) => {
-  //   if (err) {
-  //     console.log(err.message);
-  //     return res.status(409).json({ error: err });
-  //   }
-  res.send(200);
-  // });
+  console.log(req.body);
+  const { itemName, itemDesc, imgUrl, itemQuant, Theme } = req.body;
+  const category = req.body.Theme;
+  const itemPrice = req.body.price;
+  const theme = await ThemeModel.findOne({ Theme_Name: Theme });
+  const item = new ItemModel({
+    Item_Name: itemName,
+    Item_Qty: itemQuant,
+    Item_Price: itemPrice,
+    Description: itemDesc,
+    Item_Category: Theme,
+    Item_Image_Url: imgUrl,
+    Theme_ID: theme._id,
+  });
+  const insertItem = await ItemModel.insertMany([item]);
+  insertItem ? res.send(200) : res.send(500).json({ error: "Item not added" });
 });
 
 app.delete("/inventory", async (req, res) => {
@@ -243,25 +194,12 @@ app.post("/checkout", async (req, res) => {
         },
       }
     );
-    // TODO insert properly
-    const order = await OrdersModel.insertMany([productsOrdered]);
-    console.log(order);
+    // // TODO insert properly
+    // const order = await OrdersModel.insertMany([productsOrdered]);
+    // console.log(order);
     res.json({ orderId: "6567c2eb7d5d9ea780fcf839" });
   }
 });
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    // message="User is Logged Out, Require Re-Login"
-    message = "You are logged out, please login again!!";
-    return next();
-  } else {
-    const err = createError(
-      401,
-      "You cannot access this page without logging in!!!!"
-    );
-    next(err);
-  }
-}
 
 app.use(function (err, req, res, next) {
   if (err.status === 401) {

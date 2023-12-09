@@ -4,11 +4,6 @@ import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 import { useNavigate } from "react-router-dom";
 
-import {
-  createAuthUserWithEmailAndPassword,
-  createUserDocumentFromAuth,
-} from "../../utils/firebase/firebase.utils";
-
 import { SignUpContainer } from "./NewItemform.styles";
 
 const defaultFormFields = {
@@ -103,13 +98,18 @@ const NewItemForm = () => {
           <option value="" disabled>
             Select a Theme
           </option>
-          {["Spiderman", "Friends", "Naruto", "Kung Fu Panda", "Batman"].map(
-            (option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            )
-          )}
+          {[
+            "Spiderman",
+            "Friends",
+            "Naruto",
+            "Kung Fu Panda",
+            "Batman",
+            "Avengers",
+          ].map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
         </select>
         <Button type="submit" onClick={(e) => handleSubmit(e)}>
           Save to inventory

@@ -20,7 +20,6 @@ const Category = () => {
         .then((data) => {
           setProducts(data);
           setFilterProducts(data);
-          console.log("data", data);
         });
     } catch (error) {
       console.log("user sign in failed", error);

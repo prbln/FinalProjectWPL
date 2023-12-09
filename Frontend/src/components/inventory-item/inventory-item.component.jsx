@@ -84,10 +84,7 @@ const InventoryItem = ({ cartItem, index }) => {
       } else alert("Unable to update Item");
     });
   };
-  const addNewItems = (id, newprice, newstock, newtitle) => {
-    // TODO 03. Adding new items inventory
-    console.log(id, newprice, newstock, newtitle);
-  };
+
   return (
     <TableRow>
       <TableCell>{index + 1}</TableCell>
