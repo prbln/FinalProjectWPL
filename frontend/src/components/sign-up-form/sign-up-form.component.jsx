@@ -170,7 +170,7 @@ const SignUpForm = () => {
           value={phone}
         />
         {!validPhone && (
-          <p style={{ color: "red" }}>Please enter a valid phone number.(Numbers Only)</p>
+          <p style={{ color: "red" }}>Please enter a valid 10-digit phone number.(Numbers Only)</p>
         )}
 
         <FormInput
