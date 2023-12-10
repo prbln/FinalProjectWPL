@@ -80,7 +80,7 @@ const OrderDetails = ({ orderDetails }) => {
         <p>
           <strong>Products Ordered:</strong>
           {Object.values(orderDesc)?.map((item, index) => (
-            <OrderItem key={index} item={item} />
+            <OrderItem index={index+1} item={item} />
           ))}
         </p>
         <p>
