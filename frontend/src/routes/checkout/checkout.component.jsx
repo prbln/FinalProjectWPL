@@ -1,19 +1,55 @@
-import { useContext } from 'react';
+import { useContext, useState } from "react";
 
-import { CartContext } from '../../contexts/cart.context';
+import { CartContext } from "../../contexts/cart.context";
 
-import CheckoutItem from '../../components/checkout-item/checkout-item.component';
+import CheckoutItem from "../../components/checkout-item/checkout-item.component";
 
 import {
   CheckoutContainer,
   CheckoutHeader,
   HeaderBlock,
   Total,
-} from './checkout.styles';
+} from "./checkout.styles";
+import Button from "../../components/button/button.component";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../contexts/user.context";
 
 const Checkout = () => {
-  const { cartItems, cartTotal } = useContext(CartContext);
-
+  const navigate = useNavigate();
+  const {
+    cartItems,
+    setCartItems,
+    cartTotal,
+    setCartTotal,
+    cartCount,
+    setCartCount,
+  } = useContext(CartContext);
+  const { currentUser } = useContext(UserContext);
+  const handleOrderPlaced = () => {
+    if (!currentUser) {
+      alert("Please log in before placing an order");
+      navigate("/signin");
+    } else {
+      fetch("http://localhost:8000/checkout", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cartItems),
+      }).then(async (res) => {
+        if (res.status == 200) {
+          const orderId = await res.json();
+          console.log("orderId", orderId);
+          // TODO 02. BEFORE NAGIVATING GET cart items to empty, unable to use setCartItems from cart context
+          navigate(`/orderDetails/${orderId.orderId}`);
+        } else {
+          const errorMessage = await res.json();
+          alert(errorMessage.error);
+        }
+      });
+    }
+  };
   return (
     <CheckoutContainer>
       <CheckoutHeader>
@@ -36,7 +72,13 @@ const Checkout = () => {
       {cartItems.map((cartItem) => (
         <CheckoutItem key={cartItem.id} cartItem={cartItem} />
       ))}
-      <Total>Total: ${cartTotal}</Total>
+
+      <Total>
+        Total: ${cartTotal}
+        <Button onClick={(cartItems) => handleOrderPlaced(cartItems)}>
+          Place Order
+        </Button>
+      </Total>
     </CheckoutContainer>
   );
 };

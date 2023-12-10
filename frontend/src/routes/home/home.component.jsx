@@ -22,7 +22,7 @@ const Home = () => {
 
   useEffect(() => {
     const getAllThemes = async () => {
-      const data = await fetch("https://fakestoreapi.com/products")
+      const data = await fetch("http://localhost:8000/themes")
         .then((res) => res.json())
         .then((themes) => {
           setcategories(themes);

@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from "react";
 
 const addCartItem = (cartItems, productToAdd) => {
   const existingCartItem = cartItems.find(
@@ -47,6 +47,7 @@ export const CartContext = createContext({
   clearItemFromCart: () => {},
   cartCount: 0,
   cartTotal: 0,
+  resetCart: () => {},
 });
 
 export const CartProvider = ({ children }) => {
@@ -75,7 +76,7 @@ export const CartProvider = ({ children }) => {
     setCartItems(addCartItem(cartItems, productToAdd));
   };
 
-  const removeItemToCart = (cartItemToRemove) => {
+  const removeItemFromCart = (cartItemToRemove) => {
     setCartItems(removeCartItem(cartItems, cartItemToRemove));
   };
 
@@ -83,15 +84,23 @@ export const CartProvider = ({ children }) => {
     setCartItems(clearCartItem(cartItems, cartItemToClear));
   };
 
+  const resetCart = () => {
+    setCartItems([]);
+    setCartCount(0);
+    setCartTotal(0); // Set cartTotal to 0
+  };
+
   const value = {
     isCartOpen,
     setIsCartOpen,
     addItemToCart,
-    removeItemToCart,
+    removeItemFromCart,
     clearItemFromCart,
+    setCartItems,
     cartItems,
     cartCount,
     cartTotal,
+    resetCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

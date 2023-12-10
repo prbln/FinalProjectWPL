@@ -7,11 +7,12 @@ import {
 
 const DirectoryItem = ({ category: categories }) => {
   const navigate = useNavigate();
-  const { image, title } = categories;
+  const { id, image, title } = categories;
+
   return (
     <DirectoryItemContainer>
       <BackgroundImage imageUrl={image} />
-      <Body onClick={(e) => navigate(`/shop/hats`)}>
+      <Body onClick={(e) => navigate(`shop/${title}`)}>
         <h2>{title.substring(0, 15)}</h2>
         <p>Shop Now</p>
       </Body>

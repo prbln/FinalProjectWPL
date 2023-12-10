@@ -12,9 +12,12 @@ import styled from "styled-components";
 
 export const ImageContainer = styled.div`
   img {
+    margin: 5px;
     width: 10%;
     height: 10%;
   }
+  width: 10%;
+  height: 10%;
 `;
 
 export const BaseSpan = styled.span`
@@ -22,6 +25,9 @@ export const BaseSpan = styled.span`
 `;
 
 export const Quantity = styled(BaseSpan)`
+  input {
+    width: 100%;
+  }
   display: flex;
 `;
 
@@ -44,6 +50,7 @@ export const Total = styled.span`
   font-size: 36px;
 `;
 export const AdminTable = styled.table`
+  table-layout: fixed;
   width: 75%;
   min-height: 90vh;
   margin: 50px auto 0;
@@ -58,10 +65,11 @@ export const TableBody = styled.tbody``;
 
 export const TableRow = styled.tr`
   input {
-    width: 100%;
     border: None;
     foont-size: 20px;
+    height: 100%;
   }
+
   border-bottom: 1px solid darkgrey;
 `;
 

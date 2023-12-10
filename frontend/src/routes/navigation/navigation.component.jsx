@@ -1,14 +1,13 @@
 import { Fragment, useContext } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, Navigate } from "react-router-dom";
 
 import CartIcon from "../../components/cart-icon/cart-icon.component";
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
 
 import { UserContext } from "../../contexts/user.context";
 import { CartContext } from "../../contexts/cart.context";
-
-import { ReactComponent as CrwnLogo } from "../../assets/logo.svg";
-import { signOutUser } from "../../utils/firebase/firebase.utils";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import {
   NavigationContainer,
@@ -18,9 +17,23 @@ import {
 } from "./navigation.styles";
 
 const Navigation = () => {
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const { isCartOpen } = useContext(CartContext);
-
+  const navigate = useNavigate();
+  const signOutUser = (e) => {
+    e.preventDefault();
+    setCurrentUser("");
+    navigate("/signin");
+    navigate(0);
+  };
+  const location = useLocation();
+  const renderAuthLink = () => {
+    if (location.pathname == "/signin") {
+      return <NavLink to="/signup">SIGN UP</NavLink>;
+    } else {
+      return <NavLink to="/signin">SIGN IN</NavLink>;
+    }
+  };
   return (
     <Fragment>
       <NavigationContainer>
@@ -29,13 +42,21 @@ const Navigation = () => {
         </LogoContainer>
 
         <NavLinks>
-          <NavLink to="/shop">SHOP</NavLink>
+          {parseInt(currentUser?.user.admin) ? (
+            <NavLink to="/inventory">Check Inventory</NavLink>
+          ) : (
+            <></>
+          )}
+
           {currentUser ? (
-            <NavLink as="span" onClick={signOutUser}>
-              SIGN OUT
+            <NavLink as="span">
+              <span style={{ "margin-right": "20px", "font-size": "22px" }}>
+                <b>Hi! {currentUser.user.name} 🤗 </b>
+              </span>
+              <span onClick={(e) => signOutUser(e)}>SIGN OUT</span>
             </NavLink>
           ) : (
-            <NavLink to="/signin">SIGN IN</NavLink>
+            renderAuthLink()
           )}
           <CartIcon />
         </NavLinks>
