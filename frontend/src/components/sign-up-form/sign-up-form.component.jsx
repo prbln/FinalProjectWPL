@@ -1,9 +1,7 @@
-import { useState } from "react";
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
-import { useNavigate } from "react-router-dom";
-
 import { SignUpContainer } from "./sign-up-form.styles";
 
 const defaultFormFields = {
@@ -11,30 +9,37 @@ const defaultFormFields = {
   username: "",
   password: "",
   confirmPassword: "",
+  address: "",
+  phone: "",
 };
 
 const SignUpForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
-  const [strongPass, setStorngPass] = useState(true);
-  const { name, username, password, confirmPassword, address, phone } =
-    formFields;
+  const [strongPass, setStrongPass] = useState(true);
+  const [validEmail, setValidEmail] = useState(true);
+  const [validPhone, setValidPhone] = useState(true);
+  const [validAddress, setValidAddress] = useState(true);
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+  const { name, username, password, confirmPassword, address, phone } = formFields;
   const navigate = useNavigate();
+
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
-
-    setStorngPass(true);
+    setStrongPass(true);
+    setValidEmail(true);
+    setValidPhone(true);
+    setValidAddress(true);
+    setPasswordsMatch(true);
   };
+
   const isStrongPassword = (password) => {
-    // Define the rules for a strong password
     const minLength = 6;
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumbers = /\d/.test(password);
-    const hasSpecialCharacters = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(
-      password
-    );
+    const hasSpecialCharacters = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password);
 
-    // Check if the password meets all criteria
     const isStrong =
       password.length >= minLength &&
       hasUpperCase &&
@@ -45,50 +50,91 @@ const SignUpForm = () => {
     return isStrong;
   };
 
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isPhoneValid = (phone) => {
+    const phoneRegex = /^\d{10}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const isAddressValid = (address) => {
+    const addRegex=/^[@~#a-zA-Z0-9, \-]+$/;
+    return addRegex.test(address);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     if (password !== confirmPassword) {
-      alert("passwords do not match");
-      return;
+      setPasswordsMatch(false);
+      return ;
     }
 
     if (!isStrongPassword(password)) {
-      setStorngPass(!strongPass);
-    } else {
-      fetch("http://localhost:8000/signup", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name,
-          username: username,
-          phone: phone,
-          password: password,
-          confirmPassword: confirmPassword,
-          address: address,
-        }),
-      }).then(async (res) => {
-        if (res.status == 200) {
-          const orderId = await res.json();
-          alert("Account Successfully Created!");
-          navigate(`/signin`);
-        }
-        if (res.status == 409) {
-          const err = await res.json();
-          alert(err);
-          resetFormFields();
-        }
-      });
+      setStrongPass(false);
+      return;
     }
+
+    if (!isEmailValid(username)) {
+      setValidEmail(false);
+      return;
+    }
+
+    if (!isPhoneValid(phone)) {
+      setValidPhone(false);
+      return;
+    }
+
+    if (!isAddressValid(address)) {
+      setValidAddress(false);
+      return;
+    }
+
+    // Continue with the existing submit logic
+    fetch("http://localhost:8000/signup", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        username: username,
+        phone: phone,
+        password: password,
+        confirmPassword: confirmPassword,
+        address: address,
+      }),
+    }).then(async (res) => {
+      if (res.status === 200) {
+        const orderId = await res.json();
+        alert("Account Successfully Created!");
+        navigate(`/signin`);
+      } else if (res.status === 409) {
+        const err = await res.json();
+        alert(err.error.message);
+        resetFormFields();
+      }
+    });
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
     setFormFields({ ...formFields, [name]: value });
+
+    if (name === "username") {
+      setValidEmail(true);
+    } else if (name === "phone") {
+      setValidPhone(true);
+    } else if (name === "address") {
+      setValidAddress(true);
+    }
   };
+
   return (
     <SignUpContainer>
       <h2>Don't have an account?</h2>
@@ -110,9 +156,11 @@ const SignUpForm = () => {
           onChange={handleChange}
           name="username"
           value={username}
-          pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-          title="Enter a valid email address"
         />
+        {!validEmail && (
+          <p style={{ color: "red" }}>Please enter a valid email address.</p>
+        )}
+
         <FormInput
           placeholder="Phone Number"
           type="tel"
@@ -120,9 +168,11 @@ const SignUpForm = () => {
           onChange={handleChange}
           name="phone"
           value={phone}
-          pattern="^[0-9]+$"
-          title="Numbers only"
         />
+        {!validPhone && (
+          <p style={{ color: "red" }}>Please enter a valid phone number.(Numbers Only)</p>
+        )}
+
         <FormInput
           placeholder="Address"
           type="text"
@@ -130,9 +180,11 @@ const SignUpForm = () => {
           onChange={handleChange}
           name="address"
           value={address}
-          pattern="^[a-zA-Z0-9, \-]+$"
-          title="No special characters allowed (white spaces, commas, hyphen(-) are allowed)"
         />
+        {!validAddress && (
+          <p style={{ color: "red" }}>Please enter a valid address.(Special characters not allowed. Allowed characters whitespace,comma,hyphen(-))</p>
+        )}
+
         <FormInput
           placeholder="Password"
           type="password"
@@ -143,12 +195,13 @@ const SignUpForm = () => {
         />
         {!strongPass && (
           <p style={{ color: "red" }}>
-            Password is not string enough. Password should be - <br /> Atleast 6
+            Password is not strong enough. Password should be - <br /> At least 6
             characters long <br /> Contain at least one uppercase letter <br />
             Contain at least one lowercase letter <br /> Contain at least one
             digit <br /> Contain at least one special character
           </p>
         )}
+
         <FormInput
           placeholder="Confirm Password"
           type="password"
@@ -157,6 +210,13 @@ const SignUpForm = () => {
           name="confirmPassword"
           value={confirmPassword}
         />
+
+      {!passwordsMatch && (
+                <p style={{ color: "red" }}>
+                  Passwords Don't Match.
+                </p>
+              )}
+
         <Button type="submit" onClick={(e) => handleSubmit(e)}>
           Sign Up
         </Button>
