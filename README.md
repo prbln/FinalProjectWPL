@@ -22,24 +22,29 @@ List any prerequisites or dependencies that users need to have installed before 
 2. Navigate to the project directory:
 
    ```bash
-   cd 
+   cd FinalProjectWpl
+   ```
+3. Open a terimal and checkout to the final-branch:
+
+   ```bash
+   git checkout final-branch
    ```
 
 ## Frontend Setup
 
-3. Open a terminal and navigate to the `frontend` directory:
+4. Open a terminal and navigate to the `frontend` directory:
 
    ```bash
    cd frontend
    ```
 
-4. Install the required libraries:
+5. Install the required libraries:
 
    ```bash
    npm install
    ```
 
-5. Start the frontend server:
+6. Start the frontend server:
 
    ```bash
    npm start
@@ -49,56 +54,82 @@ List any prerequisites or dependencies that users need to have installed before 
 
 ## Backend Setup
 
-6. Open another terminal and navigate to the `backend` directory:
+7. Open another terminal and navigate to the `backend` directory:
 
    ```bash
-   cd ../backend
+   cd backend
    ```
 
-7. Install the required libraries:
+8. Install the required libraries:
 
    ```bash
    npm install
    ```
 
-8. Start the backend server:
+9. Start the backend server:
 
    ```bash
    npm start
    ```
 
-   The backend will be accessible at `http://localhost:4000`.
+   The backend will be accessible at `http://localhost:8000`.
 
 ## Running the Application
 
-9. With both the frontend and backend servers running, open your web browser and go to `http://localhost:3000` to access the application.
+10. With both the frontend and backend servers running, open your web browser and go to `http://localhost:3000` to access the application.
 
-## Integrated Technology Stack
+# Integrated Technology Stack
 
-Provide information on the technology stack used in your project, including both frontend and backend technologies.
+## Frontend
 
-### Frontend
+- **React:**
+  - A widely-used JavaScript library known for building modular and efficient user interfaces.
+  - Enables the creation of a dynamic and responsive UI.
 
-- React: A JavaScript library for building user interfaces.
-- Other frontend libraries or frameworks used.
+- **Communication with Backend:**
+  - Frontend seamlessly connects to the backend through API calls.
+  - Ensures a smooth user experience.
 
-### Backend
+- **Data Management:**
+  - MongoDB database stores and manages data.
+  - Provides a reliable foundation for the application.
 
-- MongoDB: A NoSQL database for storing and managing data.
-- Node.js: A JavaScript runtime for server-side scripting.
+## Backend
+
+- **MongoDB:**
+  - Chosen database for its NoSQL structure.
+  - Handles diverse and dynamic book-related information.
+
+- **Node.js:**
+  - Server-side scripting technology.
+  - Facilitates communication between the frontend and MongoDB database.
+
+- **Express.js:**
+  - A web application framework for Node.js.
+  - Streamlines the development of robust and scalable server-side applications.
 
 ## Features
 
-Briefly describe the key features and functionalities of your project, including any user authentication, data management, or interaction capabilities.
+- **Efficiency and Scalability:**
+  - Node.js chosen for its efficiency and scalability on the server side.
+  - Express.js enhances the development of a robust and scalable backend system.
 
-## Contributing
+## Contribution
+# Team Members
 
-If you would like to contribute to the project, please follow the [contribution guidelines](CONTRIBUTING.md).
+Meet the talented individuals who contributed to the success of our project:
 
-## License
+1. **Deekshitha Juvvadi (DXJ220012)**
 
-This project is licensed under the [MIT License](LICENSE).
+2. **Mohit Gullani (MXG210090)**
+
+3. **Prabhleen Kaur Saini (PXS210087)**
+
+4. **Ujwal Shah (USS220000)**
+
+5. **Venkat Biyyapu (VXB220005)**
 
 ## Acknowledgments
 
-Give credit to any third-party libraries, frameworks, or resources that you used or were inspired by in your project.
+We would like to express our gratitude to each team member for their dedication and contributions to the success of our project. Together, we have created something amazing!
+
