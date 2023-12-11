@@ -114,8 +114,8 @@ List any prerequisites or dependencies that users need to have installed before 
   - Node.js chosen for its efficiency and scalability on the server side.
   - Express.js enhances the development of a robust and scalable backend system.
 
-## Contribution
-# Team Members
+# Contribution
+## Team Members
 
 Meet the talented individuals who contributed to the success of our project:
 
